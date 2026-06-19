@@ -8,7 +8,7 @@ if (!sessionSecret && process.env.NODE_ENV === 'production') {
   throw new Error('SESSION_SECRET is required in production')
 }
 
-export const sessionCookie = createCookie('__finance_session', {
+export const sessionCookie = createCookie('__agent_admin_session', {
   secrets: [sessionSecret ?? 'dev-only-change-me'],
   httpOnly: true,
   sameSite: 'Lax',

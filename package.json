@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "node --watch --import remix/node-tsx server.ts",
     "start": "node --import remix/node-tsx server.ts",
-    "test": "node --import remix/node-tsx --test",
+    "test": "remix test",
     "typecheck": "tsc --noEmit"
   },
   "engines": {
@@ -17,6 +17,7 @@
   "devDependencies": {
     "@types/node": "latest",
     "happy-dom": "^20.10.6",
+    "playwright": "^1.61.0",
     "typescript": "latest"
   }
 }

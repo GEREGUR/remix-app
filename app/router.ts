@@ -3,6 +3,8 @@ import { formData } from 'remix/middleware/form-data'
 import { staticFiles } from 'remix/middleware/static'
 
 import controller from './actions/controller.tsx'
+import loginController from './actions/auth/login/controller.tsx'
+import logoutController from './actions/auth/logout/controller.tsx'
 import signupController from './actions/auth/signup/controller.tsx'
 import { loadAuth } from './middleware/auth.ts'
 import { loadDatabase } from './middleware/database.ts'
@@ -32,4 +34,6 @@ export const router = createRouter<AppContext>({
 })
 
 router.map(routes, controller)
+router.map(routes.auth.login, loginController)
+router.map(routes.auth.logout, logoutController)
 router.map(routes.auth.signup, signupController)

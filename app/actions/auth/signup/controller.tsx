@@ -71,7 +71,7 @@ export default createController(routes.auth.signup, {
       let session = completeAuth(context)
       setAuthSession(session, toUserIdentity(user))
 
-      return redirect(routes.home.href(), 303)
+      return redirect(routes.dashboard.href(), 303)
     },
   },
 })

@@ -4,32 +4,31 @@ import { css } from 'remix/ui'
 import { routes } from '../../../routes.ts'
 import { Document } from '../../../ui/document.tsx'
 
-export type SignupValues = {
-  name?: string
+export type LoginValues = {
   email?: string
 }
 
-export type SignupErrors = Partial<Record<'name' | 'email' | 'password' | 'form', string>>
+export type LoginErrors = Partial<Record<'email' | 'password' | 'form', string>>
 
-type SignupPageProps = {
-  errors?: SignupErrors
-  values?: SignupValues
+type LoginPageProps = {
+  errors?: LoginErrors
+  values?: LoginValues
 }
 
 const FONT_STACK =
   "Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
 
-export function SignupPage(handle: Handle<SignupPageProps>) {
+export function LoginPage(handle: Handle<LoginPageProps>) {
   return () => {
     let { errors = {}, values = {} } = handle.props
 
     return (
-      <Document title="Sign up | Agent Admin" head={<SignupHead />}>
+      <Document title="Login | Agent Admin" head={<LoginHead />}>
         <main
           mix={css({
             minHeight: '100vh',
-            background: '#f6f7f9',
-            color: '#17181c',
+            background: '#0f1419',
+            color: '#f6f8fb',
             fontFamily: FONT_STACK,
             display: 'grid',
             placeItems: 'center',
@@ -37,22 +36,22 @@ export function SignupPage(handle: Handle<SignupPageProps>) {
           })}
         >
           <section
-            aria-labelledby="signup-title"
+            aria-labelledby="login-title"
             mix={css({
               width: '100%',
               maxWidth: '420px',
-              background: '#ffffff',
-              border: '1px solid #dedfe3',
+              background: '#151c23',
+              border: '1px solid #27313d',
               borderRadius: '8px',
               padding: '28px',
-              boxShadow: '0 18px 48px rgba(23, 24, 28, 0.08)',
+              boxShadow: '0 24px 70px rgba(0, 0, 0, 0.32)',
             })}
           >
             <header mix={css({ marginBottom: '24px' })}>
               <p
                 mix={css({
                   margin: '0 0 8px',
-                  color: '#5d6470',
+                  color: '#9da8b5',
                   fontSize: '14px',
                   lineHeight: 1.4,
                 })}
@@ -60,7 +59,7 @@ export function SignupPage(handle: Handle<SignupPageProps>) {
                 Agent Admin
               </p>
               <h1
-                id="signup-title"
+                id="login-title"
                 mix={css({
                   margin: 0,
                   fontSize: '28px',
@@ -69,21 +68,13 @@ export function SignupPage(handle: Handle<SignupPageProps>) {
                   letterSpacing: 0,
                 })}
               >
-                Create your admin account
+                Sign in to manage agents
               </h1>
             </header>
 
             {errors.form ? <FormError>{errors.form}</FormError> : null}
 
-            <form method="post" action={routes.auth.signup.action.href()} mix={formStyle}>
-              <Field
-                label="Name"
-                name="name"
-                type="text"
-                autoComplete="name"
-                value={values.name}
-                error={errors.name}
-              />
+            <form method="post" action={routes.auth.login.action.href()} mix={formStyle}>
               <Field
                 label="Email"
                 name="email"
@@ -96,7 +87,7 @@ export function SignupPage(handle: Handle<SignupPageProps>) {
                 label="Password"
                 name="password"
                 type="password"
-                autoComplete="new-password"
+                autoComplete="current-password"
                 error={errors.password}
               />
               <button
@@ -106,19 +97,20 @@ export function SignupPage(handle: Handle<SignupPageProps>) {
                   minHeight: '44px',
                   border: 0,
                   borderRadius: '6px',
-                  background: '#1062fe',
+                  background: '#4f8cff',
                   color: '#ffffff',
                   font: 'inherit',
+                  fontSize: '14px',
                   fontWeight: 700,
                   cursor: 'pointer',
                   transition: 'background-color 150ms ease',
                   '&:hover, &:focus-visible': {
-                    background: '#084bc8',
+                    background: '#2f73f5',
                     outline: 'none',
                   },
                 })}
               >
-                Sign up
+                Sign in
               </button>
             </form>
           </section>
@@ -128,19 +120,15 @@ export function SignupPage(handle: Handle<SignupPageProps>) {
   }
 }
 
-function SignupHead() {
-  return () => (
-    <>
-      <meta name="description" content="Create an account for the private VPS agent admin panel." />
-    </>
-  )
+function LoginHead() {
+  return () => <meta name="description" content="Private VPS agent administration panel." />
 }
 
 function Field(
   handle: Handle<{
     label: string
     name: string
-    type: 'text' | 'email' | 'password'
+    type: 'email' | 'password'
     autoComplete: string
     value?: string
     error?: string
@@ -159,8 +147,8 @@ function Field(
         inputStyle,
         error
           ? css({
-              borderColor: '#c4272f',
-              boxShadow: '0 0 0 3px rgba(196, 39, 47, 0.12)',
+              borderColor: '#e35f66',
+              boxShadow: '0 0 0 3px rgba(227, 95, 102, 0.14)',
             })
           : css({}),
       ],
@@ -171,10 +159,8 @@ function Field(
         <span mix={labelStyle}>{label}</span>
         {type === 'email' ? (
           <input {...inputProps} type="email" />
-        ) : type === 'password' ? (
-          <input {...inputProps} type="password" />
         ) : (
-          <input {...inputProps} type="text" />
+          <input {...inputProps} type="password" />
         )}
         {error ? (
           <span id={errorId} mix={errorTextStyle}>
@@ -193,10 +179,10 @@ function FormError(handle: Handle<{ children: string }>) {
       mix={css({
         margin: '0 0 16px',
         padding: '10px 12px',
-        background: '#fff1f1',
-        border: '1px solid #f2c7c9',
+        background: '#351d24',
+        border: '1px solid #71323b',
         borderRadius: '6px',
-        color: '#922029',
+        color: '#ffd7db',
         fontSize: '14px',
         lineHeight: 1.4,
       })}
@@ -212,7 +198,7 @@ const formStyle = css({
 })
 
 const labelStyle = css({
-  color: '#343842',
+  color: '#d8dee6',
   fontSize: '14px',
   fontWeight: 700,
   lineHeight: 1.4,
@@ -221,21 +207,21 @@ const labelStyle = css({
 const inputStyle = css({
   width: '100%',
   minHeight: '44px',
-  border: '1px solid #c9ccd3',
+  border: '1px solid #35414f',
   borderRadius: '6px',
   padding: '10px 12px',
-  color: '#17181c',
-  background: '#ffffff',
+  color: '#f6f8fb',
+  background: '#10161c',
   font: 'inherit',
   outline: 'none',
   '&:focus': {
-    borderColor: '#1062fe',
-    boxShadow: '0 0 0 3px rgba(16, 98, 254, 0.14)',
+    borderColor: '#4f8cff',
+    boxShadow: '0 0 0 3px rgba(79, 140, 255, 0.18)',
   },
 })
 
 const errorTextStyle = css({
-  color: '#922029',
+  color: '#ffb8be',
   fontSize: '13px',
   lineHeight: 1.35,
 })
