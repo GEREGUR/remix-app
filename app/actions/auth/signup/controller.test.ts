@@ -96,7 +96,7 @@ test('login starts an auth session and renders the dashboard', async () => {
   )
 
   assert.equal(dashboardResponse.status, 200)
-  assert.match(await dashboardResponse.text(), /Agent control plane/)
+  assert.match(await dashboardResponse.text(), /Agent operations/)
 })
 
 test('logout destroys the auth session', async () => {

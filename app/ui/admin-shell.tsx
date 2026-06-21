@@ -1,5 +1,6 @@
 import type { Handle, RemixNode } from 'remix/ui'
 import { css } from 'remix/ui'
+import { theme } from 'remix/ui/theme'
 
 import type { UserIdentity } from '../data/schema.ts'
 import { routes } from '../routes.ts'
@@ -12,9 +13,6 @@ type AdminShellProps = {
   user: UserIdentity
 }
 
-const FONT_STACK =
-  "Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-
 export function AdminShell(handle: Handle<AdminShellProps>) {
   return () => {
     let { active, children, title, user } = handle.props
@@ -24,37 +22,50 @@ export function AdminShell(handle: Handle<AdminShellProps>) {
         <div mix={shellStyle}>
           <aside mix={sidebarStyle}>
             <a href={routes.dashboard.href()} mix={brandStyle} aria-label="Agent Admin dashboard">
-              <span mix={brandMarkStyle}>A</span>
+              <span mix={brandMarkStyle}>AA</span>
               <span>Agent Admin</span>
             </a>
+
             <nav aria-label="Primary" mix={navStyle}>
               <a
                 href={routes.dashboard.href()}
                 aria-current={active === 'dashboard' ? 'page' : undefined}
                 mix={navItemStyle}
               >
-                Dashboard
+                <span>01</span>
+                <span>Dashboard</span>
               </a>
               <span aria-disabled="true" mix={[navItemStyle, disabledNavItemStyle]}>
-                Agents
+                <span>02</span>
+                <span>Agents</span>
               </span>
               <span aria-disabled="true" mix={[navItemStyle, disabledNavItemStyle]}>
-                Settings
+                <span>03</span>
+                <span>Settings</span>
               </span>
             </nav>
           </aside>
+
           <div mix={workspaceStyle}>
             <header mix={topbarStyle}>
-              <div mix={accountStyle}>
-                <strong>{user.name}</strong>
-                <span>{user.email}</span>
+              <div mix={commandBarStyle}>
+                <span aria-hidden="true">&gt;</span>
+                <span>agent-admin dashboard --live</span>
               </div>
-              <form method="post" action={routes.auth.logout.action.href()}>
-                <button type="submit" mix={logoutButtonStyle}>
-                  Sign out
-                </button>
-              </form>
+
+              <div mix={accountWrapStyle}>
+                <div mix={accountStyle}>
+                  <strong>{user.name}</strong>
+                  <span>{user.email}</span>
+                </div>
+                <form method="post" action={routes.auth.logout.action.href()}>
+                  <button type="submit" mix={logoutButtonStyle}>
+                    Sign out
+                  </button>
+                </form>
+              </div>
             </header>
+
             <div mix={contentStyle}>{children}</div>
           </div>
         </div>
@@ -66,138 +77,205 @@ export function AdminShell(handle: Handle<AdminShellProps>) {
 const shellStyle = css({
   minHeight: '100vh',
   display: 'grid',
-  gridTemplateColumns: '224px minmax(0, 1fr)',
-  background: '#0f1419',
-  color: '#f6f8fb',
-  fontFamily: FONT_STACK,
+  gridTemplateColumns: '220px minmax(0, 1fr)',
+  background: theme.surface.lvl0,
+  color: theme.colors.text.primary,
+  fontFamily: theme.fontFamily.sans,
   '@media (max-width: 860px)': {
     gridTemplateColumns: '1fr',
   },
 })
 
 const sidebarStyle = css({
-  borderRight: '1px solid #26313d',
-  background: '#111820',
-  padding: '20px 16px',
+  borderRight: `1px solid ${theme.colors.border.default}`,
+  background: theme.surface.lvl1,
+  padding: theme.space.lg,
   '@media (max-width: 860px)': {
     borderRight: 0,
-    borderBottom: '1px solid #26313d',
+    borderBottom: `1px solid ${theme.colors.border.default}`,
+    padding: theme.space.md,
   },
 })
 
 const brandStyle = css({
-  display: 'inline-flex',
+  display: 'grid',
+  gridTemplateColumns: '32px minmax(0, 1fr)',
   alignItems: 'center',
-  gap: '10px',
-  color: '#f6f8fb',
+  gap: theme.space.md,
+  color: theme.colors.text.primary,
+  fontSize: theme.fontSize.sm,
+  fontWeight: theme.fontWeight.bold,
+  lineHeight: theme.lineHeight.tight,
   textDecoration: 'none',
-  fontSize: '15px',
-  fontWeight: 780,
-  lineHeight: 1,
+  '&:focus-visible': {
+    outline: `1px solid ${theme.colors.focus.ring}`,
+    outlineOffset: '4px',
+  },
 })
 
 const brandMarkStyle = css({
   display: 'grid',
   placeItems: 'center',
-  width: '30px',
-  height: '30px',
-  borderRadius: '8px',
-  background: '#4f8cff',
-  color: '#ffffff',
-  fontSize: '14px',
-  fontWeight: 800,
+  width: '32px',
+  height: '32px',
+  border: `1px solid ${theme.colors.border.strong}`,
+  borderRadius: theme.radius.none,
+  color: theme.colors.focus.ring,
+  fontSize: theme.fontSize.xxs,
+  fontWeight: theme.fontWeight.bold,
 })
 
 const navStyle = css({
   display: 'grid',
-  gap: '4px',
-  marginTop: '28px',
+  gap: theme.space.xs,
+  marginTop: theme.space.xxl,
   '@media (max-width: 860px)': {
-    gridTemplateColumns: 'repeat(3, max-content)',
-    gap: '8px',
-    marginTop: '18px',
+    gridAutoFlow: 'column',
+    gridAutoColumns: 'max-content',
+    gap: theme.space.sm,
+    marginTop: theme.space.lg,
     overflowX: 'auto',
+    paddingBottom: theme.space.xs,
   },
 })
 
 const navItemStyle = css({
-  display: 'flex',
+  display: 'grid',
+  gridTemplateColumns: '24px minmax(0, 1fr)',
   alignItems: 'center',
-  minHeight: '36px',
-  borderRadius: '6px',
-  padding: '0 10px',
-  color: '#aab5c2',
+  minHeight: theme.control.height.md,
+  border: `1px solid transparent`,
+  borderRadius: theme.radius.none,
+  color: theme.colors.text.muted,
+  fontSize: theme.fontSize.xs,
+  lineHeight: theme.lineHeight.tight,
+  padding: `0 ${theme.space.sm}`,
   textDecoration: 'none',
-  fontSize: '14px',
-  fontWeight: 680,
-  lineHeight: 1,
+  '& span:first-child': {
+    color: theme.colors.text.muted,
+  },
   '&[aria-current="page"]': {
-    color: '#f6f8fb',
-    background: '#1b2632',
+    borderColor: theme.colors.border.default,
+    background: theme.surface.lvl2,
+    color: theme.colors.text.primary,
+  },
+  '&[aria-current="page"] span:first-child': {
+    color: theme.colors.focus.ring,
+  },
+  '&:focus-visible': {
+    outline: `1px solid ${theme.colors.focus.ring}`,
+    outlineOffset: '2px',
   },
 })
 
 const disabledNavItemStyle = css({
-  opacity: 0.48,
+  opacity: 0.52,
 })
 
 const workspaceStyle = css({
   minWidth: 0,
   display: 'grid',
-  gridTemplateRows: '64px minmax(0, 1fr)',
+  gridTemplateRows: 'auto minmax(0, 1fr)',
 })
 
 const topbarStyle = css({
+  display: 'grid',
+  gridTemplateColumns: 'minmax(0, 1fr) auto',
+  alignItems: 'center',
+  gap: theme.space.lg,
+  minHeight: '58px',
+  borderBottom: `1px solid ${theme.colors.border.default}`,
+  background: theme.surface.lvl0,
+  padding: `0 ${theme.space.xl}`,
+  '@media (max-width: 760px)': {
+    gridTemplateColumns: '1fr',
+    alignItems: 'stretch',
+    padding: theme.space.md,
+  },
+})
+
+const commandBarStyle = css({
+  display: 'flex',
+  minWidth: 0,
+  gap: theme.space.sm,
+  color: theme.colors.text.secondary,
+  fontSize: theme.fontSize.xs,
+  lineHeight: theme.lineHeight.tight,
+  '& span:first-child': {
+    color: theme.colors.focus.ring,
+  },
+  '& span:last-child': {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+})
+
+const accountWrapStyle = css({
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'space-between',
-  gap: '16px',
-  borderBottom: '1px solid #26313d',
-  padding: '0 24px',
-  '@media (max-width: 520px)': {
-    padding: '12px 16px',
-    minHeight: '64px',
+  justifyContent: 'end',
+  gap: theme.space.lg,
+  minWidth: 0,
+  '@media (max-width: 760px)': {
+    justifyContent: 'space-between',
+  },
+  '@media (max-width: 420px)': {
+    display: 'grid',
+    justifyContent: 'stretch',
   },
 })
 
 const accountStyle = css({
   display: 'grid',
-  gap: '2px',
+  gap: theme.space.xs,
   minWidth: 0,
+  textAlign: 'right',
   '& strong': {
-    color: '#f6f8fb',
-    fontSize: '14px',
-    lineHeight: 1.25,
+    overflow: 'hidden',
+    color: theme.colors.text.primary,
+    fontSize: theme.fontSize.xs,
+    fontWeight: theme.fontWeight.semibold,
+    lineHeight: theme.lineHeight.tight,
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
   '& span': {
-    color: '#8996a5',
-    fontSize: '12px',
-    lineHeight: 1.25,
+    overflow: 'hidden',
+    color: theme.colors.text.muted,
+    fontSize: theme.fontSize.xxs,
+    lineHeight: theme.lineHeight.tight,
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  '@media (max-width: 760px)': {
+    textAlign: 'left',
   },
 })
 
 const logoutButtonStyle = css({
-  minHeight: '36px',
-  border: '1px solid #354253',
-  borderRadius: '6px',
-  padding: '0 12px',
-  background: '#151c23',
-  color: '#d7dee7',
-  font: 'inherit',
-  fontSize: '13px',
-  fontWeight: 720,
+  minHeight: theme.control.height.md,
+  border: `1px solid ${theme.colors.action.secondary.border}`,
+  borderRadius: theme.radius.sm,
+  background: theme.colors.action.secondary.background,
+  color: theme.colors.action.secondary.foreground,
   cursor: 'pointer',
+  font: 'inherit',
+  fontSize: theme.fontSize.xs,
+  fontWeight: theme.fontWeight.semibold,
+  padding: `0 ${theme.space.md}`,
   '&:hover, &:focus-visible': {
-    borderColor: '#4f8cff',
-    color: '#ffffff',
-    outline: 'none',
+    borderColor: theme.colors.focus.ring,
+    color: theme.colors.text.primary,
+    outline: `1px solid ${theme.colors.focus.ring}`,
+    outlineOffset: '2px',
   },
 })
 
 const contentStyle = css({
   minWidth: 0,
-  padding: '28px 24px',
+  padding: theme.space.xl,
   '@media (max-width: 640px)': {
-    padding: '20px 16px',
+    padding: theme.space.lg,
   },
 })
