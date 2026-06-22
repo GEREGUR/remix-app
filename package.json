@@ -5,6 +5,9 @@
   "scripts": {
     "dev": "node --watch --import remix/node-tsx server.ts",
     "start": "node --import remix/node-tsx server.ts",
+    "tailscale:serve": "tailscale serve --bg --https=443 http://127.0.0.1:44100",
+    "tailscale:serve:status": "tailscale serve status",
+    "tailscale:serve:off": "tailscale serve --https=443 off",
     "test": "remix test",
     "typecheck": "tsc --noEmit"
   },
